@@ -43,7 +43,7 @@ public abstract class RootController extends ComponentBase {
   @Inject 
   protected ServletContext servletContext;
 
-	protected void cachePut(String key, Object data) {
+  protected void cachePut(String key, Object data) {
 		this.httpSession.setAttribute(key, data);
 	}
 
@@ -70,8 +70,11 @@ public abstract class RootController extends ComponentBase {
 		}
 		this.routingPage(pageId);
 	}*/
-	
+
 	protected Locale getCurrentLocale() {
-		return localeResolver.resolveLocale(request);//((SessionLocaleResolver)localeResolver);//LocaleContextHolder.getLocale();
+		return null;//localizationManager.getLocale();
+		//LocaleContextHolder.getLocale();
+		
+		//return localeResolver.resolveLocale(request);//((SessionLocaleResolver)localeResolver);//LocaleContextHolder.getLocale();
 	}
 }

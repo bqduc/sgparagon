@@ -120,7 +120,7 @@ public class UserAccountRegister extends DetailHome<UserAccountProfile>/*RootCon
 		}
 	}
 
-	public void registerProfile() {
+	public void registerProfile(String language) {
 		try {
 			preProcessUserAccount();
 			/*
@@ -131,7 +131,7 @@ public class UserAccountRegister extends DetailHome<UserAccountProfile>/*RootCon
 				return;
 			}
 			*/
-
+/*
 			if (this.businessUnit != null) {
 				this.entity.setCompanyName(this.businessUnit.getName());
 			}
@@ -149,9 +149,10 @@ public class UserAccountRegister extends DetailHome<UserAccountProfile>/*RootCon
 
 			this.authorizationService.register(context);
 			//businessService.registerUserAccount(this.entity);
-			facesService.addDetailMessage(persistenceMessageSource.getMessage("msg.userAccountRegisterSuccess", new Object[] {this.entity.getEmail()}, super.getCurrentLocale()));
+			//facesService.addDetailMessage(persistenceMessageSource.getMessage("msg.userAccountRegisterSuccess", new Object[] {this.entity.getEmail()}, super.getCurrentLocale()));
 			Faces.getFlash().setKeepMessages(true);
 			FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "index");
+			*/
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -230,7 +231,7 @@ public class UserAccountRegister extends DetailHome<UserAccountProfile>/*RootCon
 		CorpMimeMessage corpMimeMessage = CorpMimeMessage.builder()
 				.from("ducbuiquy@gmail.com")
 				.subject(CommunicatorConstants.CTX_DEFAULT_REGISTRATION_SUBJECT) //Should get data from resource bundle for localization
-				.locale(this.getCurrentLocale())
+				//.locale(this.getCurrentLocale())
 				.build();
 
 		UserAccountProfile userAccount = (UserAccountProfile)context.get(CommunicatorConstants.CTX_USER_ACCOUNT);

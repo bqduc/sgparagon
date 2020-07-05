@@ -84,6 +84,7 @@
 			<version>${version.javax.faces-api}</version>
 		</dependency>		
 
+
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
