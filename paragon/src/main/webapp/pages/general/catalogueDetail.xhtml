@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{customLayoutMB.template}">
+
+	<ui:define name="title">
+		<adm:breadcrumb title="#{messages['lbl.general.deail'].concat(' ').concat(messages['lbl.object.authority'].toLowerCase())}"/>
+		#{messages['lbl.general.deail'].concat(' ').concat(messages['lbl.object.authority'].toLowerCase())}
+	</ui:define>
+
+	<ui:define name="body">
+		<f:metadata>
+			<f:viewParam name="id" value="#{catalogueDelegator.id}" converter="javax.faces.Long"/>
+			<!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{catalogueDelegator.init()}"/>-->
+			<f:event type="preRenderView" listener="#{catalogueDelegator.init}"/>
+		</f:metadata>
+
+		<h:form id="form" prependId="false">
+    	<p:focus rendered="#{empty catalogueDelegator.id}"/>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+        	<div id="main-buttons" class="hidden-sm hidden-xs">
+						<p:commandButton value="#{messages['lbl.general.save']}" action="#{catalogueDelegator.save}" update="@form" icon="fa fa-check" styleClass="btn-primary"/>
+						<p:spacer width="5" rendered="#{catalogueDelegator.isNew()}"/>
+						<p:commandButton value="#{messages['lbl.general.reset']}" action="#{catalogueDelegator.clear}" process="@this" icon="fa fa-refresh" styleClass="btn-success" update="@form" rendered="#{catalogueDelegator.isNew()}" resetValues="true"/>
+						<p:spacer width="5" rendered="#{not catalogueDelegator.isNew()}"/>
+						
+						<p:commandButton value="#{messages['lbl.general.delete']}" action="#{catalogueDelegator.remove}" process="@this" rendered="#{not catalogueDelegator.isNew()}" icon="fa fa-trash" styleClass="btn-danger">
+							<f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}"/>
+							<p:confirm header="#{messages['lbl.general.confirmation']}" message="#{messages['lbl.general.areYouSure']}" icon="ui-icon-danger"/>
+						</p:commandButton>
+						<p:spacer width="5"/>
+						<p:commandButton value="#{messages['lbl.general.goBack']}" immediate="true" action="catalogueBrowse?faces-redirect=true" process="@this" icon="fa fa-reply"/>
+          </div>
+          <p:splitButton value="#{messages['lbl.general.save']}" action="#{catalogueDelegator.save}" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary">
+	          <p:menuitem value="#{messages['lbl.general.reset']}" action="#{catalogueDelegator.clear}" process="@this" update="@form" rendered="#{catalogueDelegator.isNew()}" resetValues="true" icon="fa fa-refresh"/>
+	          <p:menuitem value="#{messages['lbl.general.delete']}" action="#{catalogueDelegator.remove}" process="@this" rendered="#{not catalogueDelegator.isNew()}" icon="fa fa-trash">
+	          	<p:confirm header="#{messages['lbl.general.confirmation']}" message="#{messages['lbl.general.areYouSure']}" icon="ui-icon-danger"/>
+	          </p:menuitem>
+	          <p:separator/>
+	          <p:menuitem value="#{messages['lbl.general.goBack']}" action="catalogueBrowse?faces-redirect=true" process="@this" immediate="true" icon="fa fa-reply"/>
+          </p:splitButton>
+
+          <p:separator/>
+
+					<div class="ui-g ui-fluid">
+						<div class="ui-sm-12 ui-md-2 ui-lg-1">
+						    <p:outputLabel value="#{messages['lbl.general.displayName']}" for="displayName"/>
+						</div>
+						<div class="ui-sm-12 ui-md-4 ui-lg-5" >
+						    <p:inputText id="displayName" value="#{catalogueDelegator.bizEntity.displayName}"/>
+						</div>
+						<div class="ui-sm-12 ui-md-2 ui-lg-1">
+						    <p:outputLabel for="name" value="#{messages['lbl.general.name']}"/>
+						</div>
+						<div class="ui-sm-12 ui-md-4 ui-lg-5" >
+						    <p:inputText id="name" value="#{catalogueDelegator.bizEntity.name}" size="4" styleClass="form-control" style="width: 50%"/>
+						</div>
+						<div class="ui-sm-12 ui-md-2 ui-lg-1">
+						    <p:outputLabel value="#{messages['lbl.general.active']}" for="active"/>
+						</div>
+						<div class="ui-sm-12 ui-md-4 ui-lg-5" >
+							<p:selectBooleanCheckbox id="active" value="#{catalogueDelegator.bizEntity.active}"/>
+						</div>
+						<div class="ui-sm-12 ui-md-2 ui-lg-1">
+						    <p:outputLabel value="#{messages['lbl.general.parent']}" for="itemParent"/>
+						</div>
+            <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+							<p:autoComplete id="itemParent" value="#{autoCompleteAuthority.item}" completeMethod="#{autoCompleteAuthority.completeItem}"
+							                var="theme" itemLabel="#{theme.name}" itemValue="#{theme}" converter="#{authorityConverter}" forceSelection="true" style="width: 50%">
+								<p:ajax event="itemSelect" listener="#{catalogueDelegator.handleParentSelect}" />
+								<f:facet name="itemtip">
+							  	<h:panelGrid columns="2" cellpadding="5">
+				            <f:facet name="header">
+											<h:outputText styleClass="ui-theme ui-theme-#{theme.name}" style="margin-left:35px" />
+				            </f:facet>
+				
+				            <p:outputLabel value="Code:" />
+				            <h:outputText value="#{theme.displayName}" />
+				
+				            <p:outputLabel value="Name:" />
+				            <h:outputText value="#{theme.name}" />
+							    </h:panelGrid>
+								</f:facet>
+							</p:autoComplete>
+            </div>
+						<div class="ui-sm-12 ui-md-2 ui-lg-1">
+						    <p:outputLabel value="#{messages['lbl.general.parent']}" for="category"/>
+						</div>
+            <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+							<p:selectOneMenu id="category" value="#{catalogueDelegator.category}" converter="#{catalogueConverter}" effect="fade" style="width:600px"  var="currCategory" filter="true" filterMatchMode="startsWith">
+            		<f:selectItems value="#{catalogueDelegator.catalogues}" var="currCatalogue" itemLabel="#{currCatalogue.name}" itemValue="#{currCatalogue}" />
+			            <p:column>
+			               <!-- <f:facet name="header">
+			                   <h:outputText value="Code"/>
+			                </f:facet> -->
+			                <h:outputText value="#{currCategory.code}" />
+			            </p:column>
+			            <p:column>
+			               <!-- <f:facet name="header">
+			                   <h:outputText value="Name"/>
+			                </f:facet> -->
+			                <h:outputText value="#{currCategory.name}" />
+			            </p:column>
+			        </p:selectOneMenu>
+            </div>
+            <div class="ui-sm-12 ui-md-2 ui-lg-1">
+            	<p:outputLabel value="#{messages['lbl.general.info']}" for="inptInfo"/>
+            </div>
+            <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+            	<p:inputTextarea id="inptInfo" value="#{catalogueDelegator.bizEntity.info}" rows="5"/>
+          	</div>
+        	</div>
+				</div>
+			</div>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+		    <p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes" icon="fa fa-check"/>
+		    <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no" icon="fa fa-close"/>
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

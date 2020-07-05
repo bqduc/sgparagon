@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>#{messages['general.app.fullTitle']}</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144"/>
+    <meta name="theme-color" content="#444"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <style type="text/css">
+        /* below css hides growls in small screens and makes messages visible */
+        @media ( max-width: 768px) {
+            body div.ui-growl {
+                display: none;
+            }
+
+            body div.ui-messages {
+                display: block;
+            }
+        }
+
+        /* below css hides messages in medium/big devices and makes growl visible in such devices */
+        @media ( min-width: 769px) {
+            body div.ui-growl {
+                display: block;
+            }
+
+            body div.ui-messages {
+                display: none;
+            }
+        }
+
+        body {
+            overflow-y: hidden;
+        }
+
+        body.login-page {
+            background-color: transparent;
+        }
+
+        html {
+            background-image: -webkit-linear-gradient(bottom, #6B77A1 0%, #737EA5 3%, #9599B3 15%,
+            #B1B0BF 28%, #C7C1C8 41%, #D6CDCF 57%, #DFD5D3 74%, #E2D7D4 100%);
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+</h:head>
+<h:body styleClass="hold-transition login-page" >
+    <div class="login-box">
+        <div class="login-logo"><p style="text-align:center">
+        	<p:link href="index.xhtml">#{messages['general.app.fullTitle']}</p:link></p>
+        </div>
+        <div class="box login-box-body">
+            <h:form prependId="false">
+                <div>
+                    <p class="login-box-msg">#{messages['aux.loginMessage']}</p>
+                    <h:panelGroup rendered="#{param.authfailed eq 'true'}">
+                        <div class="alert alert-danger">
+                            #{messages['aux.loginInvalid']}<br />.
+                            #{messages[session.getAttribute('authenticateResultAtt')]}
+                        </div>
+                    </h:panelGroup>
+                </div>
+                <div class="form-group has-feedback">
+                    <p:inputText id="username" styleClass="form-control" placeholder="#{messages['aux.login']}" feedback="true" >
+                        <p:focus/>
+                    </p:inputText>
+                    <i class="fa fa-envelope form-control-feedback"></i>
+                </div>
+                <div class="form-group has-feedback">
+                    <p:password id="password" styleClass="form-control" placeholder="#{messages['aux.password']}" feedback="true" />
+                    <i class="fa fa-lock form-control-feedback" style="font-size: 18px"></i>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p:commandButton id="submit" styleClass="btn btn-success btn-block" value="#{messages['aux.loginAction']}" ajax="false"/>
+                    </div>
+                </div><p:spacer height="20"/><br/>
+            </h:form>
+            
+            <a href="forgotPassword.jsf" class="text-center">#{messages['aux.forgotPassword']}</a> <br/> 
+            <a href="/pages/public/user/userProfile.jsf" class="text-center">#{messages['aux.registerNewMembership']}</a>
+            <div class="text-center">
+            --#{messages['lbl.or']}--<br/> <p:spacer height="20"/>
+                <a class="btn btn-social-icon btn-adn"><i class="fa fa-adn" title="#{messages['lbl.loginBy'].concat(' App.Net')}"></i></a><p:spacer height="10" width="2"/>
+                <a class="btn btn-social-icon btn-bitbucket"><i class="fa fa-bitbucket" title="#{messages['lbl.loginBy'].concat(' Bitbucket')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-dropbox"><i class="fa fa-dropbox" title="#{messages['lbl.loginBy'].concat(' Dropbox')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-facebook"><i class="fa fa-facebook" title="#{messages['lbl.loginBy'].concat(' Facebook')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-flickr"><i class="fa fa-flickr" title="#{messages['lbl.loginBy'].concat(' Flicker')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-foursquare"><i class="fa fa-foursquare" title="#{messages['lbl.loginBy'].concat(' Foursquare')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-github"><i class="fa fa-github" title="#{messages['lbl.loginBy'].concat(' Github')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-google"><i class="fa fa-google-plus" title="#{messages['lbl.loginBy'].concat(' Google-Plus')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-instagram"><i class="fa fa-instagram" title="#{messages['lbl.loginBy'].concat(' Instagram')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-linkedin"><i class="fa fa-linkedin" title="#{messages['lbl.loginBy'].concat(' Linkedin')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-microsoft"><i class="fa fa-windows" title="#{messages['lbl.loginBy'].concat(' Microsoft')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-odnoklassniki"><i class="fa fa-odnoklassniki" title="#{messages['lbl.loginBy'].concat(' Odnoklassniki')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-openid"><i class="fa fa-openid" title="#{messages['lbl.loginBy'].concat(' OpenID')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-pinterest"><i class="fa fa-pinterest" title="#{messages['lbl.loginBy'].concat(' Pinterest')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-reddit"><i class="fa fa-reddit" title="#{messages['lbl.loginBy'].concat(' Reddit')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-soundclound"><i class="fa fa-soundclound" title="#{messages['lbl.loginBy'].concat(' SoundCloud')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-tumblr"><i class="fa fa-tumblr" title="#{messages['lbl.loginBy'].concat(' Tumblr')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter" title="#{messages['lbl.loginBy'].concat(' Twitter')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-vimeo"><i class="fa fa-vimeo" title="#{messages['lbl.loginBy'].concat(' Vimeo')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-vk"><i class="fa fa-vk" title="#{messages['lbl.loginBy'].concat(' VK')}"></i></a><p:spacer height="1" width="2"/>
+                <a class="btn btn-social-icon btn-yahoo"><i class="fa fa-yahoo" title="#{messages['lbl.loginBy'].concat(' Yahoo')}"></i></a><p:spacer height="1" width="2"/>
+            </div>
+        </div>
+    </div>
+</h:body>
+</html>

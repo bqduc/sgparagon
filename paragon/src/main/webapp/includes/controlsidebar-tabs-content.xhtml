@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+	<ui:fragment>
+        <script type="text/javascript">
+            $(document).ready(function () {
+            	$('label:contains("Restore defaults")').text("#{messages['controlsidebar.label.restore-defaults']}");
+            	$("input[name='q']" ).val( "#{messages['menu.search.placeholder']}" );
+            	$('input[name="q"]').attr('placeholder', "#{messages['menu.search.placeholder']}")//Search menu items...
+
+            	$("#toggle-menu-layout-label").text( "#{messages['controlsidebar.label.menu-horientation']}" );
+
+            	$('h4.control-sidebar-heading:contains("Layout Options")').text("#{messages['controlsidebar.header']}");
+
+            	$('h4.control-sidebar-heading:contains("Skins")').text("#{messages['controlsidebar.header.skins']}");
+            	
+            	$('p:contains("Toggle menu orientation between")').replaceWith($.parseHTML('#{messages["controlsidebar.txt.menu-horientation"]}'));
+
+            	$("#fixed-layout-label").text("#{messages['controlsidebar.label.fixed-layout']}");
+            	$('p:contains("Activate the fixed layout, if checked the top bar will be fixed on the page.")').text("#{messages['controlsidebar.txt.fixed-layout']}");
+            	
+            	
+            	$("#boxed-layout-label").text("#{messages['controlsidebar.label.boxed-layout']}");
+            	$('p:contains("Activate the boxed layout.")').text("#{messages['controlsidebar.txt.boxed-layout']}");
+            	
+            	$("#sidebar-collapsed-label").text("#{messages['controlsidebar.label.sidebar-collapsed']}");
+            	$('p:contains("If checked the sidebar menu will be collapsed.")').text("#{messages['controlsidebar.txt.sidebar-collapsed']}");
+            	
+            	$("#sidebar-expand-hover-label").text("#{messages['controlsidebar.label.sidebar-expand-hover']}");
+            	$('p:contains("If checked the left sidebar will expand on hover.")').text("#{messages['controlsidebar.txt.sidebar-expand-hover']}");
+            
+            	$("#control-sidebar-toggle-label").text("#{messages['controlsidebar.label.sidebar-slide']}");
+            	$('p:contains("If checked control sidebar will be fixed on the page.")').text("#{messages['controlsidebar.txt.sidebar-slide']}");
+            	
+            	$("[for=sidebar-skin_input]").text("#{messages['controlsidebar.label.sidebar-skin']}");
+            	$('p:contains("If checked"):contains("skin will be used for control sidebar, otherwise"):contains("skin will be used.")').text("#{messages['controlsidebar.txt.sidebar-skin']}");
+            	
+            	$('p:contains("Blue")').text("#{messages['controlsidebar.skin.Blue']}");
+            	$('p:contains("Black")').text("#{messages['controlsidebar.skin.Black']}");
+            	$('p:contains("Purple")').text("#{messages['controlsidebar.skin.Purple']}");
+            	$('p:contains("Green")').text("#{messages['controlsidebar.skin.Green']}");
+            	$('p:contains("Red")').text("#{messages['controlsidebar.skin.Red']}");
+            	$('p:contains("Yellow")').text("#{messages['controlsidebar.skin.Yellow']}");
+            	$('p:contains("Teal")').text("#{messages['controlsidebar.skin.Teal']}");
+            	$('p:contains("Blue Light")').text("#{messages['controlsidebar.skin.BlueLight']}");
+            	$('p:contains("Black Light")').text("#{messages['controlsidebar.skin.BlackLight']}");
+            	$('p:contains("Purple Light")').text("#{messages['controlsidebar.skin.PurpleLight']}");
+            	$('p:contains("Red Light")').text("#{messages['controlsidebar.skin.RedLight']}");
+            	$('p:contains("Green Light")').text("#{messages['controlsidebar.skin.GreenLight']}");
+            	$('p:contains("Yellow Light")').text("#{messages['controlsidebar.skin.YellowLight']}");
+            	$('p:contains("Teal Light")').text("#{messages['controlsidebar.skin.TealLight']}");
+            });
+        </script>
+    </ui:fragment>
+
+    <div class="tab-pane" id="control-sidebar-home-tab">
+        <h3 class="control-sidebar-heading">#{messages['lbl.recentActivity']}</h3>
+        <ul class="control-sidebar-menu">
+            <li>
+                <a href="javascript:void(0)">
+                    <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+                    <div class="menu-info">
+                        <h4 class="control-sidebar-subheading">#{messages['lbl.langdonBirthday']}</h4>
+
+                        <p>#{messages['lbl.willBe23OnApril24Th']}</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)">
+                    <i class="menu-icon fa fa-user bg-yellow"></i>
+
+                    <div class="menu-info">
+                        <h4 class="control-sidebar-subheading">#{messages['lbl.frodoUpdatedHisProfile']}</h4>
+
+                        <p>#{messages['lbl.newPhone+1(800)555-1234']}</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)">
+                    <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+                    <div class="menu-info">
+                        <h4 class="control-sidebar-subheading">#{messages['lbl.noraJoinedMailingList']}</h4>
+
+                        <p>nora@example.com</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)">
+                    <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+                    <div class="menu-info">
+                        <h4 class="control-sidebar-subheading">#{messages['lbl.cronJob254Executed']}</h4>
+
+                        <p>#{messages['lbl.executionTime5Seconds']}</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+
+        <h3 class="control-sidebar-heading">#{messages['lbl.tasksProgress']}</h3>
+        <ul class="control-sidebar-menu">
+            <li>
+                <a href="javascript:void(0)">
+                    <h4 class="control-sidebar-subheading">
+                        #{messages['lbl.customTemplateDesign']}
+                        <span class="label label-danger pull-right">70%</span>
+                    </h4>
+
+                    <div class="progress progress-xxs">
+                        <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)">
+                    <h4 class="control-sidebar-subheading">
+                        #{messages['lbl.updateResume']}
+                        <span class="label label-success pull-right">95%</span>
+                    </h4>
+
+                    <div class="progress progress-xxs">
+                        <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)">
+                    <h4 class="control-sidebar-subheading">
+                        #{messages['lbl.laravelIntegration']}
+                        <span class="label label-warning pull-right">50%</span>
+                    </h4>
+
+                    <div class="progress progress-xxs">
+                        <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)">
+                    <h4 class="control-sidebar-subheading">
+                        #{messages['lbl.backEndFramework']}
+                        <span class="label label-primary pull-right">68%</span>
+                    </h4>
+
+                    <div class="progress progress-xxs">
+                        <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-pane" id="control-sidebar-settings-tab">
+        <form method="post">
+            <h3 class="control-sidebar-heading">#{messages['lbl.generalSettings']}</h3>
+
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    #{messages['lbl.reportPanelUsage']}
+                    <input type="checkbox" class="pull-right" checked=""/>
+                </label>
+
+                <p>
+                    #{messages['lbl.infoAboutGeneralSettingsOption']}
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    #{messages['lbl.allowMailRedirect']}
+                    <input type="checkbox" class="pull-right" checked=""/>
+                </label>
+
+                <p>
+                    #{messages['lbl.otherSetsOfOptionsAreAvailable']}
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    #{messages['lbl.exposeAuthorNameInPosts']}
+                    <input type="checkbox" class="pull-right" checked=""/>
+                </label>
+
+                <p>
+                    #{messages['lbl.allowUserShowNameInBlogPosts']}
+                </p>
+            </div>
+
+            <h3 class="control-sidebar-heading">#{messages['lbl.chatSettings']}</h3>
+
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    #{messages['lbl.showMeAsOnline']}
+                    <input type="checkbox" class="pull-right" checked=""/>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    #{messages['lbl.turnOffNotifications']}
+                    <input type="checkbox" class="pull-right"/>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    #{messages['lbl.deleteChatHistory']}
+                    <a href="javascript:void(0)" class="text-red pull-right">
+                        <i class="fa fa-trash-o"></i></a>
+                </label>
+            </div>
+        </form>
+    </div>
+
+</ui:composition>

@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{customLayoutMB.template}">
+
+
+	<ui:define name="metadata">
+		<ui:param name="enableSlideMenu" value="false"/> <!-- disables slide menu (only on this page) on small screens -->
+		<ui:param name="autoShowNavbar" value="false"/> <!-- disables auto show navbar (only on this page) on small devices -->
+	</ui:define>
+	<ui:define name="title">
+		<adm:breadcrumb title="#{messages['lbl.browse.currency']}"/>
+		#{messages['lbl.browse.currency']}
+	</ui:define>
+	
+	<ui:define name="body">
+    <p:panel styleClass="card box-primary" header="#{messages['lbl.browse.currency']}">
+    	<h:form prependId="false">
+	      <div id="main-buttons" class="hidden-sm hidden-xs">
+	        <p:commandButton action="currencyDetail?faces-redirect=true" icon="fa fa-plus" title="#{messages['lbl.general.new']}" styleClass="btn-primary"/>
+	        <p:spacer width="5"/>
+	        <p:commandButton icon="fa fa-trash" styleClass="btn-danger" title="#{messages['lbl.general.deleteSelected']}" action="#{currencyBrowser.delete}" disabled="#{empty currencyBrowser.selectedObjects or currencyBrowser.selectedObjects.size() == 0}" process="@this" update="@form">
+						<p:confirm header="#{messages['lbl.general.confirmation']}" message="#{messages['lbl.general.areYouSure']}" icon="ui-icon-danger" />
+	        </p:commandButton>
+	        <p:spacer width="5"/>
+	        <p:commandButton update="@(.ui-dialog)" styleClass="btn-info" title="#{messages['lbl.general.viewSelected']}"  disabled="#{empty currencyBrowser.selectedObjects or currencyBrowser.selectedObjects.size() == 0}" oncomplete="PF('selectedObjectsDiv').show()" icon="fa fa-search"/>
+	      </div>
+
+				<div id="datatable">
+					<p:dataTable var="currBizObject" value="#{currencyBrowser.businessObjects}" widgetVar="bizObjectTable" paginator="true" styleClass="header-right #{customLayoutMB.borderless ? 'no-border':''}"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,15,20,50,100,250" rows="50" rowKey="#{currBizObject.id}"
+                                 emptyMessage="#{messages['lbl.general.noObjectsFound']}" stickyHeader="true" selection="#{currencyBrowser.selectedObjects}" filteredValue="#{currencyBrowser.filteredObjects}">
+						<p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+
+            <f:facet name="header">
+							<p:outputPanel>
+						    <h:outputText value="#{messages['lbl.general.instantSearch']} "/>
+						    <p:spacer height="10"/>
+						    <p:inputText id="globalFilter" onkeyup="PF('bizObjectTable').filter()" style="width:150px" placeholder="#{messages['lbl.general.enterKeyword']}"/>
+							</p:outputPanel>
+            </f:facet>
+
+            <p:column width="5%" selectionMode="multiple" styleClass="align-center" priority="1"/>
+
+            <p:column filterBy="#{currBizObject.id}" sortBy="#{currBizObject.id}" headerText="Id" footerText="contains" filterMatchMode="contains" priority="1">
+	            <p:link value="#{currBizObject.id}" outcome="/pages/general/currencyDetail.jsf">
+								<f:param name="id" value="#{currBizObject.id}"/>
+	            </p:link>
+            </p:column>
+
+            <p:column filterBy="#{currBizObject.name}" headerText="Brand" footerText="exact" filterMatchMode="exact" priority="2">
+							<h:outputText value="#{currBizObject.name}"/>
+            </p:column>
+	          <p:column filterBy="#{currBizObject.code}" headerText="Status" footerText="equals" filterMatchMode="equals" priority="3">
+							<h:outputText value="#{currBizObject.code}"/>
+          	</p:column>
+         	</p:dataTable>
+				</div>
+				<p:spacer/>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+	        <p:commandButton value="#{messages['lbl.general.yes']}" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes" icon="fa fa-check"/>
+	        <p:commandButton value="#{messages['lbl.general.no']}" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no" icon="fa fa-close"/>
+        </p:confirmDialog>
+			</h:form>
+
+	  	<p:dialog header="#{messages['lbl.general.selectedObjects']}" widgetVar="selectedObjectsDiv" height="250" width="400" responsive="true" styleClass="box-success">
+		    <p:dataList id="selectedCarsList" value="#{currencyBrowser.selectedObjects}" var="selectedBizObject" type="definition">
+					ID: #{selectedBizObject.id} 
+		    </p:dataList>
+	  	</p:dialog>
+    </p:panel>
+  	<p:separator/>
+	</ui:define>
+</ui:composition>

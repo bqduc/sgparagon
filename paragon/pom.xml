@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>paragon</artifactId>
+    <version>0.1</version>
+    <packaging>war</packaging>
+    <name>Brilliant - Web administration</name>
+
+    <parent>
+		<groupId>net.brilliance</groupId>
+		<artifactId>aquariums</artifactId>
+        <version>0.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mojarra.version>2.3.4</mojarra.version>
+		
+		<version.joinfaces-dependencies>4.1.4</version.joinfaces-dependencies>
+		<maven.test.skip>true</maven.test.skip>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>		
+    </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+			<dependency>
+			  <groupId>org.joinfaces</groupId>
+			  <artifactId>joinfaces-dependencies</artifactId>
+			  <version>${version.joinfaces-dependencies}</version>
+			  <type>pom</type>
+			  <scope>import</scope>
+			</dependency>			
+
+            <dependency>
+                <groupId>com.github.adminfaces</groupId>
+                <artifactId>admin-theme</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>${version.primefaces}</version>
+            </dependency>
+		        <dependency>
+		            <groupId>org.primefaces.extensions</groupId>
+		            <artifactId>primefaces-extensions</artifactId>
+		            <version>${version.primefaces}</version>
+		            <!-- only for gravatar, adminfaces doesn't depend on extensions-->
+		        </dependency>                        
+        </dependencies>    
+    </dependencyManagement>  
+    
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>utility</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>paragon-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>paragon-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>paragon-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>paragon-css</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+		<!-- analytics -->
+		<dependency>
+			<groupId>javax.json</groupId>
+			<artifactId>javax.json-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-core</artifactId>
+			<version>1.59.0</version>
+		</dependency> -->
+		
+		<!-- page statistics backup on drive -->
+		<!-- <dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-drive</artifactId>
+			<version>v3-rev81-1.22.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava-jdk5</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+            <dependency>
+                <groupId>com.github.adminfaces</groupId>
+                <artifactId>admin-theme</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+
+        <!-- <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency> -->
+        <!-- <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency> -->        
+		<!-- <dependency>
+		    <groupId>javax.enterprise</groupId>
+		    <artifactId>cdi-api</artifactId>
+		    <version>2.0.SP1</version>
+		    <scope>provided</scope>
+		    <exclusions>
+		    	<exclusion>
+				    <groupId>javax.el</groupId>
+				    <artifactId>javax.el-api</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency> -->
+
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.2</version> 
+		</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
+	<dependency>
+	    <groupId>org.bouncycastle</groupId>
+	    <artifactId>bcprov-jdk15on</artifactId>
+	    <version>1.64</version>
+	</dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>		
+        <dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>     
+        <dependency>
+            <groupId>org.joinfaces</groupId>
+            <artifactId>adminfaces-spring-boot-starter</artifactId>
+            <exclusions>
+            	<exclusion>
+	                <groupId>com.github.adminfaces</groupId>
+	                <artifactId>admin-template</artifactId>
+            	</exclusion>
+            	<exclusion>
+		            <groupId>org.primefaces.extensions</groupId>
+		            <artifactId>primefaces-extensions</artifactId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${version.lombok}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.9</version>
+		</dependency>
+        
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/docs</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/java/</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

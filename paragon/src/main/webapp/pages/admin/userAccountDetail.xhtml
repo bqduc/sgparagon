@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{customLayoutMB.template}">
+
+	<ui:define name="title">
+		#{messages['lbl.object.userAccount']}
+	</ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:viewParam name="id" value="#{userAccountDetail.id}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{userAccountDetail.init()}"/>-->
+            <f:event type="preRenderView" listener="#{userAccountDetail.init}"/>
+        </f:metadata>
+
+        <adm:breadcrumb title="#{empty userAccountDetail.id ? messages['lbl.general.new'].concat(' ').concat(messages['lbl.object.userAccount'].toLowerCase())  : messages['lbl.object.userAccount'].concat(' ').concat(userAccountDetail.id)}" link="userAccountDetail.jsf?id=#{userAccountDetail.id}"/>
+        <h:form id="form" prependId="false">
+            <p:focus rendered="#{empty userAccountDetail.id}"/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="#{messages['lbl.general.save']}" action="#{userAccountDetail.save}" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5" rendered="#{userAccountDetail.isNew()}"/>
+                        <p:commandButton value="#{messages['lbl.general.clear']}" action="#{userAccountDetail.clear}" process="@this"
+                                         icon="fa fa-refresh" styleClass="btn-success"
+                                         update="@form" rendered="#{userAccountDetail.isNew()}" resetValues="true"/>
+                        <p:spacer width="5" rendered="#{not userAccountDetail.isNew()}"/>
+
+                        <p:commandButton value="#{messages['lbl.general.delete']}" action="#{userAccountDetail.remove}" process="@this"
+                                         rendered="#{not userAccountDetail.isNew()}" icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                            <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}"/>
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="#{messages['lbl.general.goBack']}" immediate="true"
+                                         action="userAccountBrowse?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-reply"/>
+                    </div>
+                    <p:splitButton value="#{messages['lbl.general.save']}" action="#{userAccountDetail.save}" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Reset" action="#{userAccountDetail.clear}"
+                                    process="@this" update="@form" rendered="#{userAccountDetail.isNew()}"
+                                    resetValues="true" icon="fa fa-refresh"/>
+                        <p:menuitem value="#{messages['lbl.general.delete']}" action="#{userAccountDetail.remove}" process="@this"
+                                    rendered="#{not userAccountDetail.isNew()}" icon="fa fa-trash"
+                                 >
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:separator/>
+                        <p:menuitem value="#{messages['lbl.general.goBack']}" action="car-list?faces-redirect=true"
+                                    process="@this" immediate="true"
+                                    icon="fa fa-reply"/>
+                    </p:splitButton>
+
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-sm-12 ui-md-2 ui-lg-1">
+                            <p:outputLabel for="id" value="Sso Id"/>
+                        </div>
+                        <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+                            <p:inputText id="id" value="#{userAccountDetail.businessObject.ssoId}" size="4"
+                                         styleClass="form-control" style="width: 50%"/>
+                        </div>
+                        <div class="ui-sm-12 ui-md-2 ui-lg-1">
+                            <p:outputLabel value="Password" for="inptPassword"/>
+                        </div>
+                        <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+                            <p:password id="inptPassword" value="#{userAccountDetail.businessObject.password}" style="width: 50%" />
+                        </div>
+                        <div class="ui-sm-12 ui-md-2 ui-lg-1">
+                            <p:outputLabel value="First Name" for="inptFirstName"/>
+                        </div>
+                        <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+                            <p:inputText id="inptFirstName" value="#{userAccountDetail.businessObject.firstName}"/>
+                        </div>
+                        <div class="ui-sm-12 ui-md-2 ui-lg-1">
+                            <p:outputLabel value="Last Name" for="inptLastName"/>
+                        </div>
+                        <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+                            <p:inputText id="inptLastName" value="#{userAccountDetail.businessObject.lastName}"/>
+                        </div>
+
+                        <div class="ui-sm-12 ui-md-2 ui-lg-1">
+                    			<p:outputLabel for="selectMany" value="Select Many:" />
+                        </div>
+                        <div class="ui-sm-12 ui-md-4 ui-lg-5" >
+			                    <p:selectManyMenu id="selectMany" value="#{selectManyMB.selectedThemes}" converter="themeConverter"
+			                                      var="t" filter="true" filterMatchMode="contains" showCheckbox="true">
+			                        <f:selectItems value="#{selectManyMB.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
+			                        <p:column>
+			                            <h:outputText styleClass="ui-theme ui-theme-#{t.name}" style="margin-left:35px" />
+			                        </p:column>
+			                        <p:column>
+			                            <h:outputText value="#{t.displayName}" />
+			                        </p:column>
+			                    </p:selectManyMenu>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

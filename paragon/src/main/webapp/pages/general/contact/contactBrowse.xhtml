@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{customLayoutMB.template}">
+
+
+    <ui:define name="metadata">
+        <ui:param name="enableSlideMenu" value="false"/> <!-- disables slide menu (only on this page) on small screens -->
+        <ui:param name="autoShowNavbar" value="false"/> <!-- disables auto show navbar (only on this page) on small devices -->
+    </ui:define>
+    <ui:define name="body">
+        <adm:breadcrumb title="Datatable"/>
+        <p:panel styleClass="card box-primary" header="#{messages['menu.generalSettings.browse.contactBrowse']}">
+            <h:form prependId="false">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton action="contactDetail?faces-redirect=true" icon="fa fa-plus"
+                                         value="#{messages['lbl.general.new']}" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="#{messages['lbl.general.deleteSelected']}" icon="fa fa-trash" styleClass="btn-danger"
+                                         action="#{contactBrowse.delete}"
+                                         disabled="#{empty contactBrowse.selectedCars or contactBrowse.selectedCars.size() == 0}"
+                                         process="@this" update="@form"
+                        >
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="#{messages['lbl.general.viewSelected']}" update="@(.ui-dialog)" styleClass="btn-info"
+                                         disabled="#{empty contactBrowse.selectedCars or contactBrowse.selectedCars.size() == 0}"
+                                         oncomplete="PF('selectedContact').show()" icon="fa fa-search"/>
+                    </div>
+
+                    <p:splitButton value="#{messages['lbl.general.new']}" action="car-form?faces-redirect=true"
+                                   icon="fa fa-plus"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="#{messages['lbl.general.deleteSelected']}" action="#{contactBrowse.delete}"
+                                    process="@this" update="@form"
+                                    disabled="#{empty contactBrowse.selectedCars or contactBrowse.selectedCars.size() == 0}"
+                                    icon="fa fa-trash">
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:menuitem value="#{messages['lbl.general.viewSelected']}" update="@(.ui-dialog)"
+                                    oncomplete="PF('selectedContact').show()"
+                                    disabled="#{empty contactBrowse.selectedCars or contactBrowse.selectedCars.size() == 0}"
+                                    icon="fa fa-search"
+                        />
+                    </p:splitButton>
+                <div id="datatable">
+                    <p:dataTable var="car" value="#{contactBrowse.businessObjects}" widgetVar="carsTable" paginator="true" styleClass="header-right #{customLayoutMB.borderless ? 'no-border':''}"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,15,20,50,100,250" rows="50" rowKey="#{car.id}"
+                                 emptyMessage="No cars found with given criteria" stickyHeader="true" selection="#{contactBrowse.selectedCars}"
+                                 filteredValue="#{contactBrowse.filteredCars}">
+
+                        <p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="#{messages['lbl.general.instantSearch']} "/>
+                                <p:spacer height="10"/>
+                                <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" style="width:150px"
+                                             placeholder="Enter keywordXX"/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column width="5%" selectionMode="multiple"
+                                  styleClass="align-center"
+                                  priority="1"/>
+
+                        <p:column filterBy="#{car.id}" sortBy="#{car.id}" headerText="Id" footerText="contains"
+                                  filterMatchMode="contains" priority="1">
+                            <p:link value="#{car.id}" outcome="/bszone/contact/contactDetail.jsf">
+                                <f:param name="id" value="#{car.id}"/>
+                            </p:link>
+                        </p:column>
+
+                        <p:column filterBy="#{car.birthdate}" sortBy="#{car.birthdate}" headerText="Year" footerText="lte" filterMatchMode="lte" priority="2">
+                            <f:facet name="filter">
+                                <p:calendar pattern="dd/MM/yyyy" navigator="true">
+                                    <f:converter converterId="calendarYearConverter"/>
+                                    <p:ajax process="@this" event="change" oncomplete="PF('carsTable').filter()"/>
+                                    <p:ajax process="@this" event="dateSelect" oncomplete="PF('carsTable').filter()"/>
+                                </p:calendar>
+                            </f:facet>
+                            <h:outputText value="#{car.birthdate}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{car.firstName}" headerText="Brand" footerText="exact" filterMatchMode="exact"
+                                  priority="2">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('carsTable').filter()">
+                                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{contactBrowse.brands}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="#{car.firstName}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{car.lastName}" headerText="Color" footerText="in" filterMatchMode="in"
+                                  priority="3">
+                            <f:facet name="filter">
+                                <p:selectCheckboxMenu label="Colors" onchange="PF('carsTable').filter()"
+                                                      panelStyle="width:125px" scrollHeight="150">
+                                    <f:selectItems value="#{contactBrowse.colors}"/>
+                                </p:selectCheckboxMenu>
+                            </f:facet>
+                            <h:outputText value="#{car.lastName}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{car.code}" headerText="Status" footerText="equals"
+                                  filterMatchMode="equals"
+                                  priority="3">
+                            <h:outputText value="#{car.code}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <p:spacer/>
+            </h:form>
+
+	        <p:dialog header="Selected contact" widgetVar="selectedContact" height="250"
+	                  width="400" responsive="true" styleClass="box-success">
+	            <p:dataList id="selectedCarsList" value="#{contactBrowse.selectedCars}" var="car"
+	                        type="definition">
+	                ID: #{car.id} - Brand: #{car.brand} - Color: #{car.color} - Price: #{car.price}
+	            </p:dataList>
+	        </p:dialog>
+        </p:panel>
+        <p:separator/>
+    </ui:define>
+
+    <ui:define name="code">
+        <p:tabView styleClass="hidden-sm hidden-xs">
+            <p:tab title="datatable">
+                <pre>
+               <code class="language-html"><h:outputText
+                       value="Table of contacts" escape="true"/>
+               </code>
+                </pre>
+            </p:tab>
+
+            <p:tab title="DatatableMB">
+                <pre>
+               <code class="language-java">
+                   <h:outputText
+                           value="Related information"
+                           escape="false"/>
+               </code>
+                </pre>
+            </p:tab>
+        </p:tabView>
+
+        <p:accordionPanel styleClass="hidden-md hidden-lg no-icon">
+            <p:tab title="datatable">
+                <pre>
+               <code class="language-html"><h:outputText
+                       value="#{sourceCodeMB.getPageSource()}" escape="true"/>
+               </code>
+                </pre>
+            </p:tab>
+
+            <p:tab title="DatatableMB">
+                <pre>
+               <code class="language-java">
+                   <h:outputText
+                           value="#{sourceCodeMB.getJavaSource('com.github.adminfaces.showcase.bean.DatatableMB')}"
+                           escape="false"/>
+               </code>
+                </pre>
+            </p:tab>
+        </p:accordionPanel>
+    </ui:define>
+</ui:composition>

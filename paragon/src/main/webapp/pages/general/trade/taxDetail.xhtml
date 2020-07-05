@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                xmlns:o="http://omnifaces.org/ui"
+                template="#{customLayoutMB.template}">
+
+    <ui:define name="title">
+        Contact detail form
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:viewParam name="id" value="#{taxController.id}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{taxController.init()}"/>-->
+            <f:event type="preRenderView" listener="#{taxController.init}"/>
+        </f:metadata>
+
+        <adm:breadcrumb title="#{empty taxController.id ? 'New Car' : 'Car '.concat(taxController.id)}" link="car-form.jsf?id=#{taxController.id}"/>
+        <h:form id="form" prependId="false" enctype="multipart/form-data">
+            <p:focus rendered="#{empty taxController.id}"/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="#{messages['lbl.general.save']}" action="#{taxController.save}" update="@form" icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5" rendered="#{taxController.isNew()}"/>
+                        <p:commandButton value="#{messages['lbl.general.clear']}" action="#{taxController.clear}" process="@this" icon="fa fa-refresh" styleClass="btn-success" update="@form" rendered="#{taxController.isNew()}" resetValues="true"/>
+                        <p:spacer width="5" rendered="#{not taxController.isNew()}"/>
+
+                        <p:commandButton value="#{messages['lbl.general.delete']}" action="#{taxController.remove}" process="@this" rendered="#{not taxController.isNew()}" icon="fa fa-trash" styleClass="btn-danger">
+                            <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}"/>
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="#{messages['lbl.general.goBack']}" immediate="true" action="inventoryBrowse?faces-redirect=true" process="@this" icon="fa fa-reply"/>
+                    </div>
+
+                    <p:separator/>
+                    
+                    <p:tabView>
+                    	<p:tab title="#{messages['lbl.generalInformation']}">
+	                      <div class="ui-g ui-fluid">
+		                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+		                            <div class="ui-sm-12 ui-g-11">
+		                                <p:outputLabel for="code" value="#{messages['lbl.general.code']}"/>
+		                            </div>
+		                            <div class="ui-sm-12 ui-g-11">
+		                                <p:inputText id="code" value="#{taxController.businessObject.code}" maxlength="50" required="true" requiredMessage="#{messages['lbl.required'].concat(' ').concat(messages['lbl.general.code'].toLowerCase())}" size="40">
+		                                </p:inputText>
+		                                <span class="help-block"> 
+		                                    <p:message for="code"/>
+		                                </span>
+		                            </div>
+		                        </div>
+		                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+		                            <div class="ui-sm-12 ui-g-11">
+		                                <p:outputLabel for="name" value="#{messages['lbl.general.name']}"/>
+		                            </div>
+		                            <div class="ui-sm-12 ui-g-11">
+		                                <p:inputText id="name" value="#{taxController.businessObject.name}" maxlength="50" required="true" 
+		                                	requiredMessage="#{messages['lbl.required'].concat(' ').concat(messages['lbl.general.name'].toLowerCase())}"/>
+		                                <span class="help-block"> 
+		                                    <p:message for="name"/>
+		                                </span>
+		                            </div>
+		                        </div>
+		                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+		                            <div class="ui-sm-12 ui-g-11">
+		                                <p:outputLabel for="taxGroup" value="#{messages['lbl.general.taxGroup']}"/>
+		                            </div>
+		                            <div class="ui-sm-12 ui-g-11">
+	                                <p:autoComplete id="taxGroup" value="#{samplePageMB.entity.talk}" completeMethod="#{samplePageMB.completeTalk}" minQueryLength="2" dropdown="true" required="true" requiredMessage="Talk is required." var="talk" itemLabel="#{talk}" itemValue="#{talk}"  />
+	                                <span class="help-block">
+	                                    <p:message for="taxGroup" />
+	                                </span>
+		                            </div>
+		                        </div>
+		                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+		                            <div class="ui-sm-12 ui-g-11">
+		                                <p:outputLabel value="#{messages['lbl.general.parent']}"/>
+		                            </div>
+		                            <div class="ui-sm-12 ui-g-11">
+																	<p:autoComplete id="itemParent" value="#{taxController.parent}" completeMethod="#{taxSuggestion.completeItem}" var="theme" itemLabel="#{theme.name}" itemValue="#{theme}" minQueryLength="3" converter="#{taxConverter}" forceSelection="true" style="width: 50%">
+																		<p:ajax event="itemSelect" listener="#{taxController.onParentSelect}"  />
+																		<f:facet name="itemtip">
+																	  	<h:panelGrid columns="2" cellpadding="5">
+														            <f:facet name="header">
+																					<h:outputText styleClass="ui-theme ui-theme-#{theme.name}" style="margin-left:35px" />
+														            </f:facet>
+														
+														            <p:outputLabel value="#{messages['lbl.general.code'].concat(':')}" />
+														            <h:outputText value="#{theme.code}" />
+														
+														            <p:outputLabel value="#{messages['lbl.general.name'].concat(':')}:" />
+														            <h:outputText value="#{theme.name}" />
+																	    </h:panelGrid>
+																		</f:facet>
+																	</p:autoComplete>
+		                            </div>
+		                        </div>
+		
+		                        <div class="ui-g-12 ui-g-nopad">
+		                            <div class="ui-g-12">
+		                                <p:outputLabel for="info" value="#{messages['lbl.general.info']}"/>
+		                            </div>
+		                            <div class="ui-g-12">
+		                                <p:inputTextarea id="info" rows="3" cols="20" counter="displayInfo" maxlength="2000" value="#{taxController.businessObject.info}"
+		                                                 counterTemplate="#{messages['msg.remainingChars']}" autoResize="true"/>
+		                                <span class="help-block"> 
+		                                    <h:outputText id="displayInfo"/> 
+		                                    <p:message for="info"/>
+		                                </span>
+		                            </div>
+		                        </div>
+                    			</div>
+                      </p:tab>
+                    </p:tabView>
+                </div>
+            </div>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,206 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{customLayoutMB.template}">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="material" value="#{customLayoutMB.materialButtons}" converter="javax.faces.Boolean"/>
+            <f:viewParam name="id" value="#{itemDetailController.id}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{itemDetailController.init()}"/>-->
+            <f:event type="preRenderView" listener="#{userAccountRegister.init}"/>
+        </f:metadata>
+    </ui:define>
+
+	<ui:define name="title">
+		<adm:breadcrumb title="#{messages['lbl.registerMembership']}"/>
+		#{messages['lbl.registerMembership']}
+	</ui:define>
+   <ui:define name="body">
+        <ui:param name="renderFormAsterisks" value="true"/>
+
+        <h:form id="form" prependId="false">
+            <p:focus context="@form"/>
+            <p:panel styleClass="box-primary card">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="#{messages['lbl.register']}" action="#{userAccountRegister.register}" update="@form" icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5" rendered="#{userAccountRegister.isNew()}"/>
+                        <p:commandButton value="#{messages['lbl.general.clear']}" action="#{userAccountRegister.clear}" process="@this"
+                                         icon="fa fa-refresh" styleClass="btn-success" update="@form"
+                                         rendered="#{userAccountRegister.isNew()}" resetValues="true"/>
+                        <p:spacer width="5" rendered="#{not userAccountRegister.isNew()}"/>
+                        <p:commandButton value="#{messages['lbl.general.delete']}" action="#{userAccountRegister.remove}" process="@this" update="@form"
+                                         rendered="#{not userAccountRegister.isNew()}" icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                            <f:setPropertyActionListener value="true"
+                                                         target="#{facesContext.externalContext.flash.keepMessages}"/>
+                            <p:confirm header="#{messages['lbl.general.confirmation']}" message="#{messages['lbl.general.areYouSure']}" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="#{messages['lbl.general.goBack']}" immediate="true" styleClass="btn-default"
+                                         action="/index?faces-redirect=true" process="@this"
+                                         icon="fa fa-reply"/>
+                    </div>
+                    <p:splitButton value="#{messages['lbl.general.save']}" action="#{userAccountRegister.save}" update="@form" icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="#{messages['lbl.general.clear']}" action="#{userAccountRegister.clear}" process="@this" update="@form"
+                                    rendered="#{userAccountRegister.isNew()}" resetValues="true" icon="fa fa-refresh"/>
+                        <p:menuitem value="#{messages['lbl.general.delete']}" action="#{userAccountRegister.remove}" process="@this" update="@form"
+                                    rendered="#{not userAccountRegister.isNew()}" icon="fa fa-trash">
+                            <f:setPropertyActionListener value="true"
+                                                         target="#{facesContext.externalContext.flash.keepMessages}"/>
+                            <p:confirm header="#{messages['lbl.general.confirmation']}" message="#{messages['lbl.general.areYouSure']}" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:separator/>
+                        <p:menuitem value="#{messages['lbl.general.goBack']}" action="/index?faces-redirect=true" process="@this"
+                                    immediate="true" styleClass="btn-default" icon="fa fa-reply"/>
+                    </p:splitButton>
+                    <p:separator/>
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="firstName" value="#{messages['lbl.general.firstName']}"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:inputText id="firstName" value="#{userAccountRegister.entity.firstName}" styleClass="form-control" size="40" requiredMessage="#{messages['msg.firstNameRequired']}"/>
+                                <span class="help-block"> 
+                                    <p:message for="firstName"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="lastName" value="#{messages['lbl.general.lastName']}" />
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:inputText id="lastName" value="#{userAccountRegister.entity.lastName}" maxlength="50" size="90" required="true" requiredMessage="#{messages['msg.lastNameRequired']}"/>
+                                <span class="help-block"> 
+                                    <p:message for="lastName"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="emailAddress" value="#{messages['lbl.general.email']}"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:inputText id="emailAddress" value="#{userAccountRegister.entity.email}" maxlength="50" size="60" required="true" requiredMessage="#{messages['msg.emailAddressRequired']}"/>
+                                <span class="help-block"> 
+                                    <p:message for="emailAddress"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="password" value="#{messages['lbl.general.password']}"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:password id="password" value="#{userAccountRegister.entity.password}" styleClass="form-control" size="30" />
+                                <span class="help-block"> 
+                                    <p:message for="password"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="businessUnit" value="#{messages['lbl.general.company']}"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:autoComplete id="businessUnit" maxResults="10" converter="#{businessUnitConverter}"  value="#{userAccountRegister.businessUnit}" 
+                                	completeMethod="#{generalAutoCompletion.onCompleteBusinessUnit}" minQueryLength="3" dropdown="true" required="false" 
+                                	requiredMessage="Talk is required." var="currEntity" itemLabel="#{currEntity.name}" itemValue="#{currEntity}">
+                                	<p:ajax event="itemSelect" listener="#{userAccountRegister.handleBusinessUnitSelect}" />
+								    <f:facet name="itemtip">
+								        <h:panelGrid columns="2" cellpadding="5">
+								            <p:outputLabel value="Code:" />
+								            <h:outputText value="#{currEntity.code}" />
+								
+								            <p:outputLabel value="Name:" />
+								            <h:outputText value="#{currEntity.name}" />
+								        </h:panelGrid>
+								    </f:facet>
+                                </p:autoComplete>
+                                <span class="help-block">
+                                    <p:message for="businessUnit" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="cities" value="#{messages['lbl.general.city']}"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:selectCheckboxMenu id="cities" label="Cities" multiple="true" filter="true" filterMatchMode="contains" >
+                                    <f:selectItems value="#{generalPageView.cities}" var="city" itemLabel="#{city}" itemValue="#{city}"/>
+                                </p:selectCheckboxMenu>
+                                <span class="help-block"> 
+                                    <p:message for="cities"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="date" value="#{messages['lbl.general.company']}"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:datePicker id="date" value="#{userAccountRegister.entity.registeredDate}" showIcon="true"/>
+                                <span class="help-block"> 
+                                    <p:message for="date"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 ui-g-nopad">
+                            <div class="ui-g-12">
+                                <p:outputLabel for="info" value="#{messages['lbl.general.info']}"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputTextarea id="info" value="#{userAccountRegister.entity.info}" rows="3" cols="20" counter="display" maxlength="2000" counterTemplate="#{messages['msg.remainingChars']}" autoResize="true"/>
+                                <span class="help-block"> 
+                                    <h:outputText id="display"/> 
+                                    <p:message for="info"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+            </p:panel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="code">
+        <p:tabView>
+            <p:tab title="#{messages['lbl.general.itegrations']}">
+           <pre>
+               <code class="language-html">
+                   <h:outputText value="#{sourceCodeMB.getPageSource()}" escape="true"/>
+               </code>
+           </pre>
+            </p:tab>
+
+            <p:tab title="#{messages['lbl.general.proficiency']}">
+              <pre>
+               <code class="language-java">
+                   <h:outputText value="#{sourceCodeMB.getJavaSource('com.github.adminfaces.showcase.bean.SamplePageMB')}"
+                                 escape="false"/>
+               </code>
+             </pre>
+            </p:tab>
+            <p:tab title="#{messages['lbl.general.details']}">
+              <pre>
+               <code class="language-java">
+                   <h:outputText value="#{sourceCodeMB.getJavaSource('com.github.adminfaces.showcase.model.Entity')}"
+                                 escape="false"/>
+               </code>
+             </pre>
+            </p:tab>
+        </p:tabView>
+    </ui:define>
+</ui:composition>
