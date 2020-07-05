@@ -37,8 +37,8 @@ public abstract class RootController extends ComponentBase {
 	@Inject
 	protected HttpServletRequest request;
 	
-	@Inject 
-	protected LocaleResolver localeResolver;
+	/*@Inject 
+	protected LocaleResolver localeResolver;*/
 
   @Inject 
   protected ServletContext servletContext;
