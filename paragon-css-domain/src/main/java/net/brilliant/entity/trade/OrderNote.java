@@ -4,7 +4,6 @@
 package net.brilliant.entity.trade;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,6 +17,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,12 +27,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.brilliant.auth.entity.UserAccountProfile;
 import net.brilliant.entity.contact.CTAContact;
-import net.brilliant.entity.contact.ContactAddress;
-import net.brilliant.entity.contact.ContactAssignment;
-import net.brilliant.entity.contact.ContactCommunication;
-import net.brilliant.entity.contact.ContactCore;
-import net.brilliant.entity.contact.ContactHierarchy;
-import net.brilliant.entity.contact.ContactProfile;
 import net.brilliant.entity.doc.DocumentBase;
 import net.brilliant.entity.doc.DocumentType;
 import net.brilliant.entity.stock.Warehouse;
@@ -84,8 +80,8 @@ public class OrderNote extends DocumentBase {
   		mappedBy="owner"
       , cascade = CascadeType.ALL
       , orphanRemoval = true
-      , fetch = FetchType.EAGER
   )
+	@LazyCollection(LazyCollectionOption.FALSE)
   private List<OrderItem> items = new ArrayList<OrderItem>();
 
   @Override

@@ -16,9 +16,7 @@
 package net.brilliant.auth.entity;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -35,6 +33,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -110,12 +110,9 @@ public class UserAccountProfile extends SsoEntityBase implements AuthenticationD
 	@Transient
 	private UserDetails userDetails;
 	
-	@Transient
 	@Builder.Default
-	private Map<String, Authority> authorityMap = new HashMap<>();
-
-	@Builder.Default
-  @OneToMany(mappedBy="userAccount", cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval=true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(mappedBy="userAccount", cascade=CascadeType.ALL)
   private List<UserAccountPrivilege> privileges = ListUtility.createDataList();
 	
 	@Column(name = "info", columnDefinition="text")
@@ -148,14 +145,6 @@ public class UserAccountProfile extends SsoEntityBase implements AuthenticationD
 	@Transient
 	public String getDisplayName() {
 		return this.firstName + " " + this.lastName;
-	}
-
-	public Map<String, Authority> getAuthorityMap() {
-		return authorityMap;
-	}
-
-	public void setAuthorityMap(Map<String, Authority> authorityMap) {
-		this.authorityMap = authorityMap;
 	}
 
 	@Transient
