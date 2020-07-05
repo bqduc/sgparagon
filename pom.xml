@@ -76,6 +76,10 @@
 		<module>paragon-i18n</module>
 		<module>paragon-auth-domain</module>
 		<module>paragon-auth</module>
+		<module>paragon-cmx</module>
+		<module>paragon-dispatcher</module>
+		<module>paragon-api-dispatcher</module>
+		<module>paragon-agent-domain</module>
 		<module>paragon</module>
     </modules>
 
