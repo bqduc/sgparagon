@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import javax.inject.Inject;
 
@@ -97,7 +98,7 @@ public class ResourcesServicesHelper extends ComponentBase {
 
 			String baseName = CommonUtility.getFileBaseName(resourcePath);
 			String extension = CommonUtility.getFileExtension(resourcePath);
-			resourceFile = File.createTempFile(baseName, "." + extension);
+			resourceFile = Files.createTempFile(baseName, "." + extension).toFile();
 			resourceFile.deleteOnExit();
 			FileOutputStream out = new FileOutputStream(resourceFile);
 			IOUtils.copy(resourceStream, out);
